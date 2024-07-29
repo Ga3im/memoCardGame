@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { GamePage } from "./pages/GamePage/GamePage";
 import { SelectLevelPage } from "./pages/SelectLevelPage/SelectLevelPage";
+import { LiderBoard } from "./pages/LiderBoard/LiderBoard";
 
 export const router = createBrowserRouter(
   [
@@ -12,6 +13,10 @@ export const router = createBrowserRouter(
       path: "/game/:pairsCount",
       element: <GamePage />,
     },
+    {
+      path: "/liderBoard",
+      element: <LiderBoard/>
+    }
   ],
   /**
    * basename нужен для корректной работы в gh pages

@@ -1,13 +1,12 @@
 import styles from "./EndGameModal.module.css";
-
 import { Button } from "../Button/Button";
-
 import deadImageUrl from "./images/dead.png";
 import celebrationImageUrl from "./images/celebration.png";
 import { postList } from "../../api";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { LeaderBoardContext } from "../../context/context";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 
 export function EndGameModal({
   isWon,
@@ -21,6 +20,8 @@ export function EndGameModal({
 
   const imgAlt = isWon ? "celebration emodji" : "dead emodji";
 
+  const navigate = useNavigate();
+
   const { liders, setLiders } = useContext(LeaderBoardContext);
 
   const [addGamer, setAddGamer] = useState({
@@ -29,10 +30,14 @@ export function EndGameModal({
     time: gameDurationSeconds.toString().padStart("2", "0"),
   });
 
+  const navToLid = ()=>{
+    navigate('/liderBoard')
+  }
   const addUser = async (e) => {
     e.preventDefault()
-    const res = await postList({addGamer});
+    const res = await postList({...addGamer});
     setLiders(res.leaders)
+    console.log(res)
   };
 console.log(addGamer)
   return (
@@ -56,12 +61,10 @@ console.log(addGamer)
           {gameDurationSeconds.toString().padStart("2", "0")}
         </div>
 
-        <Button type="submit" onClick={onClick}>
+        <Button onClick={onClick} type="submit">
           Начать сначала
-        </Button>
-        <Link className={styles.liderboard} to="/liderBoard">
-          <button className={styles.btnLeaderBoard} type="submit">Перейти к лидерборду</button>
-        </Link>
+        </Button>   
+          <button onClick={navToLid} className={styles.btnLeaderBoard} type="submit">Перейти к лидерборду</button>
       </div>
     </form>
   );

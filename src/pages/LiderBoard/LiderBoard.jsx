@@ -19,7 +19,7 @@ const {liders, setLiders} = useContext(LeaderBoardContext)
       });
   }, []);
   return (
-    <>
+    <div className={styles.body}>
       <div className={styles.container}>
         <p className={styles.title}>Лидерборд</p>
         <Link to={"/"} element={<SelectLevelPage />}>
@@ -46,6 +46,6 @@ const {liders, setLiders} = useContext(LeaderBoardContext)
           ))}
         </ul>
       </div>
-    </>
+    </div>
   );
 };

@@ -4,7 +4,7 @@ import deadImageUrl from "./images/dead.png";
 import celebrationImageUrl from "./images/celebration.png";
 import { postList } from "../../api";
 import { useContext, useState } from "react";
-import { LeaderBoardContext } from "../../context/context";
+import { EasyModeContext, LeaderBoardContext } from "../../context/context";
 import { useNavigate } from "react-router-dom";
 
 export function EndGameModal({
@@ -13,7 +13,10 @@ export function EndGameModal({
   gameDurationMinutes,
   onClick,
 }) {
-  const title = isWon ? "Вы попали на Лидерборд!" : "Вы проиграли!";
+
+  const { easy } = useContext(EasyModeContext);
+
+  const title = isWon ? `${easy? 'Вы выиграли' : 'Вы попали на Лидерборд!'}` : "Вы проиграли!";
 
   const imgSrc = isWon ? celebrationImageUrl : deadImageUrl;
 
@@ -35,12 +38,16 @@ export function EndGameModal({
     setLiders(res.leaders);
     nav("/liderBoard")
   };
+
+  const goToLiderbord = ()=>{
+    nav("/liderBoard")
+  }
   return (
-    <form action="" onSubmit={addUser}>
+    <form action="" onSubmit={isWon && !easy ?  addUser : goToLiderbord}>
       <div className={styles.modal}>
         <img className={styles.image} src={imgSrc} alt={imgAlt} />
         <h2 className={styles.title}>{title}</h2>
-        {isWon ? (
+        {isWon ? easy ? null : (
           <input
             onChange={(e) => setAddGamer({ ...addGamer, name: e.target.value })}
             className={styles.input}
@@ -49,7 +56,7 @@ export function EndGameModal({
             name=""
             id=""
           />
-        ) : null}
+        )  : null}
         <p className={styles.description}>Затраченное время:</p>
         <div className={styles.time}>
           {gameDurationMinutes.toString().padStart("2", "0")}:

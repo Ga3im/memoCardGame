@@ -5,8 +5,7 @@ import celebrationImageUrl from "./images/celebration.png";
 import { postList } from "../../api";
 import { useContext, useState } from "react";
 import { LeaderBoardContext } from "../../context/context";
-import { Link, useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 
 export function EndGameModal({
   isWon,
@@ -20,8 +19,6 @@ export function EndGameModal({
 
   const imgAlt = isWon ? "celebration emodji" : "dead emodji";
 
-  const navigate = useNavigate();
-
   const { liders, setLiders } = useContext(LeaderBoardContext);
 
   const [addGamer, setAddGamer] = useState({
@@ -30,16 +27,14 @@ export function EndGameModal({
     time: gameDurationSeconds.toString().padStart("2", "0"),
   });
 
-  const navToLid = ()=>{
-    navigate('/liderBoard')
-  }
+  const nav = useNavigate() 
+
   const addUser = async (e) => {
-    e.preventDefault()
-    const res = await postList({...addGamer});
-    setLiders(res.leaders)
-    console.log(res)
+    e.preventDefault();
+    const res = await postList({ ...addGamer });
+    setLiders(res.leaders);
+    nav("/liderBoard")
   };
-console.log(addGamer)
   return (
     <form action="" onSubmit={addUser}>
       <div className={styles.modal}>
@@ -47,7 +42,7 @@ console.log(addGamer)
         <h2 className={styles.title}>{title}</h2>
         {isWon ? (
           <input
-            onChange={(e) => setAddGamer({...addGamer, name: e.target.value})}
+            onChange={(e) => setAddGamer({ ...addGamer, name: e.target.value })}
             className={styles.input}
             placeholder="Пользователь"
             type="text"
@@ -60,11 +55,10 @@ console.log(addGamer)
           {gameDurationMinutes.toString().padStart("2", "0")}:
           {gameDurationSeconds.toString().padStart("2", "0")}
         </div>
-
-        <Button onClick={onClick} type="submit">
-          Начать сначала
-        </Button>   
-          <button onClick={navToLid} className={styles.btnLeaderBoard} type="submit">Перейти к лидерборду</button>
+        <Button onClick={onClick}>Начать сначала</Button>
+        <button className={styles.btnLeaderBoard} type="submit">
+          Перейти к лидерборду
+        </button>
       </div>
     </form>
   );

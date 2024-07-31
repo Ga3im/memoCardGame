@@ -23,7 +23,7 @@ export function EndGameModal({
   const imgAlt = isWon ? "celebration emodji" : "dead emodji";
 
   const [addGamer, setAddGamer] = useState({
-    id: liders.length + 1,
+    id: '',
     name: "Пользователь",
     time: gameDurationSeconds.toString().padStart("2", "0"),
   });

@@ -13,6 +13,10 @@ export const LiderBoard = () => {
     });
   }, []);
 
+  leaders.sort(function (a, b) {
+    return a.time - b.time;
+  });
+
   return (
     <div className={styles.body}>
       <div className={styles.container}>
@@ -25,17 +29,17 @@ export const LiderBoard = () => {
         <ul className={styles.list}>
           <li>
             <div className={styles.listContainer1}>
-              <p>Позиция</p>
-              <p>Пользователь</p>
-              <p>Время</p>
+              <p className={styles.poz}>Позиция</p>
+              <p className={styles.pol}>Пользователь</p>
+              <p className={styles.time}>Время</p>
             </div>
           </li>
-          {leaders.map((leader) => (
-            <li>
+          {leaders.map((leader, i) => (
+            <li key={leader.id}>
               <div className={styles.listContainer}>
-                <p># {leader.id}</p>
-                <p>{leader.name}</p>
-                <p>{leader.time} сек</p>
+                <p className={styles.poz}># {i + 1}</p>
+                <p className={styles.pol}>{leader.name}</p>
+                <p className={styles.time}>{leader.time} сек</p>
               </div>
             </li>
           ))}

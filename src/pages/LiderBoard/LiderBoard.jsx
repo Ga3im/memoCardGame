@@ -2,22 +2,17 @@ import { Link } from "react-router-dom";
 import { Button } from "../../components/Button/Button";
 import { SelectLevelPage } from "../SelectLevelPage/SelectLevelPage";
 import styles from "./LiderBoard.module.css";
-import { useContext, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getList } from "../../api";
-import { LeaderBoardContext } from "../../context/context";
 
 export const LiderBoard = () => {
-const {liders, setLiders} = useContext(LeaderBoardContext)
-
-    useEffect(() => {
-    getList()
-      .then((res) => {
-        setLiders(res.leaders);
-      })
-      .catch(() => {
-        console.log("ошибка");
-      });
+  const [leaders, setLeaders] = useState([]);
+  useEffect(() => {
+    getList().then((res) => {
+      setLeaders(res.leaders);
+    });
   }, []);
+
   return (
     <div className={styles.body}>
       <div className={styles.container}>
@@ -35,8 +30,8 @@ const {liders, setLiders} = useContext(LeaderBoardContext)
               <p>Время</p>
             </div>
           </li>
-          {liders.map((leader) => (
-            <li key={leader.id}>
+          {leaders.map((leader) => (
+            <li>
               <div className={styles.listContainer}>
                 <p># {leader.id}</p>
                 <p>{leader.name}</p>

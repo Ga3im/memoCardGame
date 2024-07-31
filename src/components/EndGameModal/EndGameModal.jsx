@@ -4,7 +4,7 @@ import deadImageUrl from "./images/dead.png";
 import celebrationImageUrl from "./images/celebration.png";
 import { postList } from "../../api";
 import { useContext, useState } from "react";
-import { EasyModeContext, LeaderBoardContext } from "../../context/context";
+import { EasyModeContext } from "../../context/context";
 import { useNavigate } from "react-router-dom";
 
 export function EndGameModal({
@@ -22,8 +22,6 @@ export function EndGameModal({
 
   const imgAlt = isWon ? "celebration emodji" : "dead emodji";
 
-  const { liders, setLiders } = useContext(LeaderBoardContext);
-
   const [addGamer, setAddGamer] = useState({
     id: liders.length + 1,
     name: "Пользователь",
@@ -35,7 +33,6 @@ export function EndGameModal({
   const addUser = async (e) => {
     e.preventDefault();
     const res = await postList({ ...addGamer });
-    setLiders(res.leaders);
     nav("/liderBoard")
   };
 

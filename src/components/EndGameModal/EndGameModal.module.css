@@ -51,10 +51,12 @@
   margin-bottom: 40px;
 }
 .input {
-  padding: 16px 5px 9px 19px;
   border-radius: 10px;
   border: none;
   margin-bottom: 30px;
+  width: 276px;
+  height: 45px;
+  text-align: center;
 }
 input::placeholder{
   color: #999999;

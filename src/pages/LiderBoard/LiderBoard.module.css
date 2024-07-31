@@ -1,10 +1,11 @@
 .body{
+    background: #004980;
     height: 100%;
 }
 .container{
     display: flex;
-    justify-content: space-between;
-    padding: 52px;
+    justify-content: space-around;
+    padding: 40px;
 }
 
 .title{
@@ -17,12 +18,35 @@
     list-style-type: none;
 }
 
-.listContainer{
+.listContainer1{
     display: flex;
+    height: 64px;
     margin-top: 15px;
     justify-content: space-between;
-    background: aqua;
-    padding: 5px 80px 5px 80px;
-    border-radius: 14px;
-    width: 800px;
+    background: #FFFFFF;
+    padding: 0px 20px 0px 20px;
+    border-radius: 12px;
+    width: 944px;
+    color: #999999;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 32px;
+    font-family: "Poppins", sans-serif;
+}
+
+.listContainer{
+    height: 64px;
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    justify-content: space-between;
+    background: #FFFFFF;
+    padding: 0px 20px 0px 20px;
+    border-radius: 12px;
+    width: 944px;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 32px;
+    font-family: "Poppins", sans-serif;
 }

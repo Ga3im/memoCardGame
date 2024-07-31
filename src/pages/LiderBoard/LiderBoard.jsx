@@ -29,7 +29,7 @@ const {liders, setLiders} = useContext(LeaderBoardContext)
       <div>
         <ul className={styles.list}>
           <li>
-            <div className={styles.listContainer}>
+            <div className={styles.listContainer1}>
               <p>Позиция</p>
               <p>Пользователь</p>
               <p>Время</p>
@@ -38,7 +38,7 @@ const {liders, setLiders} = useContext(LeaderBoardContext)
           {liders.map((leader) => (
             <li key={leader.id}>
               <div className={styles.listContainer}>
-                <p>{leader.id}</p>
+                <p># {leader.id}</p>
                 <p>{leader.name}</p>
                 <p>{leader.time} сек</p>
               </div>

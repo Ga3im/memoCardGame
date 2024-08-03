@@ -8,8 +8,8 @@ import { EasyModeProvider } from "./context/context";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <EasyModeProvider>
-      <RouterProvider router={router}></RouterProvider>
-    </EasyModeProvider>
-  </React.StrictMode>,
+      <EasyModeProvider>
+        <RouterProvider router={router}></RouterProvider>
+      </EasyModeProvider>
+  </React.StrictMode>
 );

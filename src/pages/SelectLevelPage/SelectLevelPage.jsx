@@ -27,9 +27,10 @@ export function SelectLevelPage() {
           </li>
         </ul>
         <div className={styles.easyMode}>
-          <p>Облегченный режим</p>
-          <input type="checkbox" onChange={() => setEasy(!easy)} />
+          <span>Облегченный режим</span>
+          <input className={styles.in} type="checkbox" onChange={() => setEasy(!easy)} />
         </div>
+        <Link className={styles.liderboard} to='/liderBoard'>Перейти к лидерборду</Link>
       </div>
     </div>
   );

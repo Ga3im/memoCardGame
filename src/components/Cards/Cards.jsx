@@ -139,14 +139,17 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
           openCards.filter(openCard => card.suit === openCard.suit && card.rank === openCard.rank);
         })
       ) {
-        openCardsWithoutPair.map(card => {
-          return (card.open = false);
+          openCardsWithoutPair.map(card => {
+            setTimeout(() => {
+            return (card.open = false);
+        }, 700);
+       
         });
-        console.log(openCardsWithoutPair);
       }
-      // надо перевернуть карту
       if (attempts === 1) {
+       setTimeout(() => {
         finishGame(STATUS_LOST);
+       }, 500); 
       }
       return;
     }
@@ -224,10 +227,10 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
         <div className={styles.containerGame}>
           {status === STATUS_IN_PROGRESS ? <Button onClick={resetGame}>Начать заново</Button> : null}
           {easy ? (
-            <p className={styles.title}>
+            <span className={styles.title}>
               Количество попыток:
               <Animation params={attempts} />
-            </p>
+            </span>
           ) : null}
         </div>
         <Link to={"/"} element={<SelectLevelPage />}>

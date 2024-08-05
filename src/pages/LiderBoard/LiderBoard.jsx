@@ -4,6 +4,11 @@ import { SelectLevelPage } from "../SelectLevelPage/SelectLevelPage";
 import styles from "./LiderBoard.module.css";
 import { useEffect, useState } from "react";
 import { getList } from "../../api";
+import hardMod from './img/hardMod.png';
+import activehardMod from './img/activeHardMod.png';
+import Super from './img/super.png';
+import  activeSuper from './img/activeSuper.png';
+
 
 export const LiderBoard = () => {
   const [leaders, setLeaders] = useState([]);
@@ -31,6 +36,7 @@ export const LiderBoard = () => {
             <div className={styles.listContainer1}>
               <p className={styles.poz}>Позиция</p>
               <p className={styles.pol}>Пользователь</p>
+              <p className={styles.dos}>Достижения</p>
               <p className={styles.time}>Время</p>
             </div>
           </li>
@@ -39,6 +45,10 @@ export const LiderBoard = () => {
               <div className={styles.listContainer}>
                 <p className={styles.poz}># {i + 1}</p>
                 <p className={styles.pol}>{leader.name}</p>
+                <p className={styles.dos}>
+                  {leader.achievements[0] === 1 ? <img className={styles.hardMode} src={activehardMod} alt="" /> : <img src={hardMod} alt="" />}
+                  {leader.achievements[1] === 2 ? <img src={activeSuper} alt="" /> : <img src={Super} alt="" />}
+                </p>
                 <p className={styles.time}>{leader.time} сек</p>
               </div>
             </li>

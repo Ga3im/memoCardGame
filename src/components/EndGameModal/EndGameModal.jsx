@@ -16,7 +16,7 @@ export function EndGameModal({
 
   const { easy } = useContext(EasyModeContext);
 
-  const title = isWon ? `${easy? 'Вы выиграли' : 'Вы попали на Лидерборд!'}` : "Вы проиграли!";
+  const title = isWon ? 'Вы попали на Лидерборд!' : "Вы проиграли!";
 
   const imgSrc = isWon ? celebrationImageUrl : deadImageUrl;
 
@@ -26,34 +26,36 @@ export function EndGameModal({
     id: '',
     name: "Пользователь",
     time: gameDurationSeconds.toString().padStart("2", "0"),
+    achievements:[],
   });
 
   const nav = useNavigate() 
 
   const addUser = async (e) => {
     e.preventDefault();
-    const res = await postList({ ...addGamer });
+    await postList({ ...addGamer });
     nav("/liderBoard")
   };
 
   const goToLiderbord = ()=>{
+  setAddGamer({...addGamer, achievements:{...achievements, [0]: easy ? 1 : null}})
     nav("/liderBoard")
   }
   return (
-    <form action="" onSubmit={isWon && !easy ?  addUser : goToLiderbord}>
+    <form action="" onSubmit={isWon ?  addUser : goToLiderbord}>
       <div className={styles.modal}>
         <img className={styles.image} src={imgSrc} alt={imgAlt} />
         <h2 className={styles.title}>{title}</h2>
-        {isWon ? easy ? null : (
-          <input
+        {isWon ? (<input
             onChange={(e) => setAddGamer({ ...addGamer, name: e.target.value })}
             className={styles.input}
             placeholder="Пользователь"
             type="text"
             name=""
             id=""
-          />
-        )  : null}
+          />)
+          : null  
+           }
         <p className={styles.description}>Затраченное время:</p>
         <div className={styles.time}>
           {gameDurationMinutes.toString().padStart("2", "0")}:

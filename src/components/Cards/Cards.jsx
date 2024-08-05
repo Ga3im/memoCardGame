@@ -30,7 +30,9 @@ function getTimerValue(startDate, endDate) {
     endDate = new Date();
   }
 
-  const diffInSecconds = Math.floor((endDate.getTime() - startDate.getTime()) / 1000);
+  const diffInSecconds = Math.floor(
+    (endDate.getTime() - startDate.getTime()) / 1000
+  );
   const minutes = Math.floor(diffInSecconds / 60);
   const seconds = diffInSecconds % 60;
   return {
@@ -51,6 +53,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   const [cards, setCards] = useState([]);
   // Текущий статус игры
   const [status, setStatus] = useState(STATUS_PREVIEW);
+  const [superGameMod, setSuperGameMod] = useState(false);
 
   // Дата начала игры
   const [gameStartDate, setGameStartDate] = useState(null);
@@ -90,13 +93,13 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
    * - "Игрок проиграл", если на поле есть две открытые карты без пары
    * - "Игра продолжается", если не случилось первых двух условий
    */
-  const openCard = clickedCard => {
+  const openCard = (clickedCard) => {
     // Если карта уже открыта, то ничего не делаем
     if (clickedCard.open) {
       return;
     }
     // Игровое поле после открытия кликнутой карты
-    const nextCards = cards.map(card => {
+    const nextCards = cards.map((card) => {
       if (card.id !== clickedCard.id) {
         return card;
       }
@@ -109,7 +112,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
     setCards(nextCards);
 
-    const isPlayerWon = nextCards.every(card => card.open);
+    const isPlayerWon = nextCards.every((card) => card.open);
 
     // Победа - все карты на поле открыты
     if (isPlayerWon) {
@@ -118,11 +121,13 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     }
 
     // Открытые карты на игровом поле
-    const openCards = nextCards.filter(card => card.open);
+    const openCards = nextCards.filter((card) => card.open);
 
     // Ищем открытые карты, у которых нет пары среди других открытых
-    const openCardsWithoutPair = openCards.filter(card => {
-      const sameCards = openCards.filter(openCard => card.suit === openCard.suit && card.rank === openCard.rank);
+    const openCardsWithoutPair = openCards.filter((card) => {
+      const sameCards = openCards.filter(
+        (openCard) => card.suit === openCard.suit && card.rank === openCard.rank
+      );
 
       if (sameCards.length < 2) {
         return true;
@@ -135,21 +140,23 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     if (easy && playerLost) {
       setAttempts(attempts - 1);
       if (
-        openCards.filter(card => {
-          openCards.filter(openCard => card.suit === openCard.suit && card.rank === openCard.rank);
+        openCards.filter((card) => {
+          openCards.filter(
+            (openCard) =>
+              card.suit === openCard.suit && card.rank === openCard.rank
+          );
         })
       ) {
-          openCardsWithoutPair.map(card => {
-            setTimeout(() => {
+        openCardsWithoutPair.map((card) => {
+          setTimeout(() => {
             return (card.open = false);
-        }, 700);
-       
+          }, 700);
         });
       }
       if (attempts === 1) {
-       setTimeout(() => {
-        finishGame(STATUS_LOST);
-       }, 500); 
+        setTimeout(() => {
+          finishGame(STATUS_LOST);
+        }, 500);
       }
       return;
     }
@@ -163,6 +170,20 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     // ... игра продолжается
   };
 
+  // открывает все карты на 5 сек
+  const epiphany = () => {
+    setSuperGameMod(!superGameMod);
+    cards.filter((card) => (card.open = true));
+    setTimeout(() => {
+      cards.filter((card) => (card.open = false));
+      setSuperGameMod(!superGameMod);
+    }, 5000);
+  };
+
+  // открывает случайную пару
+  const openTwoCards = () => {
+    console.log(cards);
+  };
   const isGameEnded = status === STATUS_LOST || status === STATUS_WON;
 
   // Игровой цикл
@@ -185,7 +206,6 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     const timerId = setTimeout(() => {
       startGame();
     }, previewSeconds * 1000);
-
     return () => {
       clearTimeout(timerId);
     };
@@ -200,66 +220,85 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
       clearInterval(intervalId);
     };
   }, [gameStartDate, gameEndDate]);
-
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <div className={styles.timer}>
-          {status === STATUS_PREVIEW ? (
-            <div>
-              <p className={styles.previewText}>Запоминайте пары!</p>
-              <p className={styles.previewDescription}>Игра начнется через {previewSeconds} секунд</p>
-            </div>
-          ) : (
-            <>
-              <div className={styles.timerValue}>
-                <div className={styles.timerDescription}>min</div>
-                <div>{timer.minutes.toString().padStart("2", "0")}</div>
+    <div className={styles.body}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <div className={styles.timer}>
+            {status === STATUS_PREVIEW ? (
+              <div>
+                <p className={styles.previewText}>Запоминайте пары!</p>
+                <p className={styles.previewDescription}>
+                  Игра начнется через {previewSeconds} секунд
+                </p>
               </div>
-              .
-              <div className={styles.timerValue}>
-                <div className={styles.timerDescription}>sec</div>
-                <div>{timer.seconds.toString().padStart("2", "0")}</div>
-              </div>
-            </>
-          )}
+            ) : (
+              <>
+                <div className={styles.timerValue}>
+                  <div className={styles.timerDescription}>min</div>
+                  <div>{timer.minutes.toString().padStart("2", "0")}</div>
+                </div>
+                :
+                <div className={styles.timerValue}>
+                  <div className={styles.timerDescription}>sec</div>
+                  <div>{timer.seconds.toString().padStart("2", "0")}</div>
+                </div>
+              </>
+            )}
+          </div>
+          <div className={styles.superBtnContainer}>
+            <img
+              onClick={epiphany}
+              className={styles.superBtn}
+              src="../super.png"
+              alt=""
+            />
+            <img
+              onClick={openTwoCards}
+              className={styles.superBtn}
+              src="../super2.png"
+              alt=""
+            />
+          </div>
+          <div className={styles.containerGame}>
+            {status === STATUS_IN_PROGRESS ? (
+              <Button onClick={resetGame}>Начать заново</Button>
+            ) : null}
+            {easy ? (
+              <span className={styles.title}>
+                Количество попыток:
+                <Animation params={attempts} />
+              </span>
+            ) : null}
+          </div>
+          <Link to={"/"} element={<SelectLevelPage />}>
+            <button className={styles.backBtn}>Назад</button>
+          </Link>
         </div>
-        <div className={styles.containerGame}>
-          {status === STATUS_IN_PROGRESS ? <Button onClick={resetGame}>Начать заново</Button> : null}
-          {easy ? (
-            <span className={styles.title}>
-              Количество попыток:
-              <Animation params={attempts} />
-            </span>
-          ) : null}
-        </div>
-        <Link to={"/"} element={<SelectLevelPage />}>
-          <button className={styles.backBtn}>Назад</button>
-        </Link>
-      </div>
 
-      <div className={styles.cards}>
-        {cards.map(card => (
-          <Card
-            key={card.id}
-            onClick={() => openCard(card)}
-            open={status !== STATUS_IN_PROGRESS ? true : card.open}
-            suit={card.suit}
-            rank={card.rank}
-          />
-        ))}
-      </div>
-
-      {isGameEnded ? (
-        <div className={styles.modalContainer}>
-          <EndGameModal
-            isWon={status === STATUS_WON}
-            gameDurationSeconds={timer.seconds}
-            gameDurationMinutes={timer.minutes}
-            onClick={resetGame}
-          />
+        <div className={styles.cards}>
+          {cards.map((card) => (
+            <Card
+              key={card.id}
+              onClick={() => openCard(card)}
+              open={status !== STATUS_IN_PROGRESS ? true : card.open}
+              suit={card.suit}
+              rank={card.rank}
+            />
+          ))}
         </div>
-      ) : null}
+
+        {isGameEnded ? (
+          <div className={styles.modalContainer}>
+            <EndGameModal
+              isWon={status === STATUS_WON}
+              gameDurationSeconds={timer.seconds}
+              gameDurationMinutes={timer.minutes}
+              onClick={resetGame}
+            />
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }

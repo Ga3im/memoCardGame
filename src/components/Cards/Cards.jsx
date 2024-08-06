@@ -1,4 +1,4 @@
-import { shuffle } from "lodash";
+import { random, shuffle } from "lodash";
 import { useContext, useEffect, useState } from "react";
 import { generateDeck } from "../../utils/cards";
 import styles from "./Cards.module.css";
@@ -177,23 +177,25 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   // наведение на иконку супер игры 1
   const epiphanyDescrip = (e) => {
     e.preventDefault();
-      setIsOpen(!isOpen);
+    setIsOpen(!isOpen);
   };
 
-  const HoverSuperGame2 = (e)=>{
-    e.preventDefault()
-      setIsOpenAl(!isOpenAl);
-  }
+  const HoverSuperGame2 = (e) => {
+    e.preventDefault();
+    setIsOpenAl(!isOpenAl);
+  };
 
   // открывает все карты на 5 сек
   const epiphany = () => {
     if (superGame === 1) {
+      clearInterval(intervalId);
       setSuperGameMod(!superGameMod);
       cards.filter((card) => (card.open = true));
       setTimeout(() => {
         cards.filter((card) => (card.open = false));
         setSuperGameMod(!superGameMod);
       }, 5000);
+      setTimer();
       setSuperGame(superGame - 1);
     }
   };
@@ -202,7 +204,13 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   const openTwoCards = () => {
     if (alahomora > 0) {
       setAlahomora(alahomora - 1);
-      console.log(cards)
+      const randomCard = cards[Math.floor(Math.random() * cards.length)];
+     randomCard.open = true;
+     cards.filter((card)=>{
+      if (card.suit === randomCard.suit && card.rank === randomCard.rank) {
+        return   card.open = true;
+      } 
+     })
     }
   };
   const isGameEnded = status === STATUS_LOST || status === STATUS_WON;
@@ -243,7 +251,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   }, [gameStartDate, gameEndDate]);
   return (
     <div className={styles.body}>
-      <div $isOpen={isOpen} className={styles.container}>
+      <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.timer}>
             {status === STATUS_PREVIEW ? (
@@ -297,7 +305,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
             >
               <img
                 onMouseOver={HoverSuperGame2}
-                onMouseOut={ () => setIsOpenAl((isOpenAl = false))}
+                onMouseOut={() => setIsOpenAl((isOpenAl = false))}
                 onClick={openTwoCards}
                 className={styles.superBtn}
                 src="../super2.png"

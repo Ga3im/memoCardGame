@@ -88,6 +88,10 @@
 .onButtonDos{
   background: none;
   border: none;
+  transition: all 0.3s;
+}
+.onButtonDos:hover{
+  transform: scale(1.2);
 }
 .descriptionEpiphany{
   position: absolute;

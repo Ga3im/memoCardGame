@@ -48,12 +48,15 @@ function getTimerValue(startDate, endDate) {
  */
 export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   let [attempts, setAttempts] = useState(3);
-  const { easy } = useContext(EasyModeContext);
+  const { easy, alahomora, setAlahomora, superGame, setSuperGame } =
+    useContext(EasyModeContext);
   // В cards лежит игровое поле - массив карт и их состояние открыта\закрыта
   const [cards, setCards] = useState([]);
   // Текущий статус игры
   const [status, setStatus] = useState(STATUS_PREVIEW);
   const [superGameMod, setSuperGameMod] = useState(false);
+  let [isOpen, setIsOpen] = useState(false);
+  let [isOpenAl, setIsOpenAl] = useState(false);
 
   // Дата начала игры
   const [gameStartDate, setGameStartDate] = useState(null);
@@ -79,6 +82,8 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     setStatus(STATUS_IN_PROGRESS);
   }
   function resetGame() {
+    setAlahomora((alahomora = 2));
+    setSuperGame((superGame = 1));
     setAttempts((attempts = 3));
     setGameStartDate(null);
     setGameEndDate(null);
@@ -169,20 +174,36 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
     // ... игра продолжается
   };
+  // наведение на иконку супер игры 1
+  const epiphanyDescrip = (e) => {
+    e.preventDefault();
+      setIsOpen(!isOpen);
+  };
+
+  const HoverSuperGame2 = (e)=>{
+    e.preventDefault()
+      setIsOpenAl(!isOpenAl);
+  }
 
   // открывает все карты на 5 сек
   const epiphany = () => {
-    setSuperGameMod(!superGameMod);
-    cards.filter((card) => (card.open = true));
-    setTimeout(() => {
-      cards.filter((card) => (card.open = false));
+    if (superGame === 1) {
       setSuperGameMod(!superGameMod);
-    }, 5000);
+      cards.filter((card) => (card.open = true));
+      setTimeout(() => {
+        cards.filter((card) => (card.open = false));
+        setSuperGameMod(!superGameMod);
+      }, 5000);
+      setSuperGame(superGame - 1);
+    }
   };
 
   // открывает случайную пару
   const openTwoCards = () => {
-    console.log(cards);
+    if (alahomora > 0) {
+      setAlahomora(alahomora - 1);
+      console.log(cards)
+    }
   };
   const isGameEnded = status === STATUS_LOST || status === STATUS_WON;
 
@@ -222,7 +243,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   }, [gameStartDate, gameEndDate]);
   return (
     <div className={styles.body}>
-      <div className={styles.container}>
+      <div $isOpen={isOpen} className={styles.container}>
         <div className={styles.header}>
           <div className={styles.timer}>
             {status === STATUS_PREVIEW ? (
@@ -247,19 +268,53 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
             )}
           </div>
           <div className={styles.superBtnContainer}>
-            <img
-              onClick={epiphany}
-              className={styles.superBtn}
-              src="../super.png"
-              alt=""
-            />
-            <img
-              onClick={openTwoCards}
-              className={styles.superBtn}
-              src="../super2.png"
-              alt=""
-            />
+            <button
+              disabled={status === STATUS_IN_PROGRESS ? false : true}
+              className={styles.onButtonDos}
+            >
+              <img
+                onMouseOver={epiphanyDescrip}
+                onMouseOut={() => setIsOpen((isOpen = false))}
+                onClick={epiphany}
+                className={styles.superBtn}
+                src="../super.png"
+                alt=""
+              />
+            </button>
+            {isOpen ? (
+              <div className={styles.descriptionEpiphany}>
+                <p className={styles.headP}>Прозрение</p>
+                <p>На 5 секунд показываются все карты.</p>
+              </div>
+            ) : null}
+
+            <div className={styles.counter}>
+              <p className={styles.counterFont}>{superGame}</p>
+            </div>
+            <button
+              disabled={status === STATUS_IN_PROGRESS ? false : true}
+              className={styles.onButtonDos}
+            >
+              <img
+                onMouseOver={HoverSuperGame2}
+                onMouseOut={ () => setIsOpenAl((isOpenAl = false))}
+                onClick={openTwoCards}
+                className={styles.superBtn}
+                src="../super2.png"
+                alt=""
+              />
+            </button>
+            {isOpenAl ? (
+              <div className={styles.descriptionAlahomora}>
+                <p className={styles.headP}>Алохомора</p>
+                <p>Открывает случайную пару</p>
+              </div>
+            ) : null}
+            <div className={styles.counter}>
+              <p className={styles.counterFont}>{alahomora}</p>
+            </div>
           </div>
+
           <div className={styles.containerGame}>
             {status === STATUS_IN_PROGRESS ? (
               <Button onClick={resetGame}>Начать заново</Button>

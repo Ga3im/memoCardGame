@@ -76,7 +76,6 @@
 .superBtnContainer{
   padding-left: 50px;
   display: flex;
-  gap: 10px;
   padding-right: 50px;
 }
 
@@ -86,7 +85,52 @@
   cursor: pointer;
   border: none;
 }
+.onButtonDos{
+  background: none;
+  border: none;
+}
+.descriptionEpiphany{
+  position: absolute;
+  width: 125px;
+  background: #C2F5FF;
+  padding: 10px 20px 20px 20px;
+  text-align: center;
+  border-radius: 12px;
+  z-index: 1;
+  top: 125px;
+  right: 755px;
+  color:#004980;
+}
+.headP{
+  padding-bottom: 10px;
+  padding-top: 5px;
+  font-weight: bold;
+}
+.descriptionAlahomora{
+  position: absolute;
+  width: 125px;
+  background: #C2F5FF;
+  padding: 10px 20px 20px 20px;
+  text-align: center;
+  border-radius: 12px;
+  z-index: 1;
+  top: 125px;
+  right: 690px;
+  color:#004980;
+}
 
+.counter{
+  position: relative;
+    right: 15px;
+    font-size: 10px;
+}
+.counterFont {
+  border-radius: 100%;
+  background: red;
+  aspect-ratio: 1;
+  color: #fff;
+  padding: 1px 3.6px 0px 3.5px;
+}
 .containerGame {
   display: flex;
   flex-direction: column;

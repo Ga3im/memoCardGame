@@ -46,8 +46,8 @@ export const LiderBoard = () => {
                 <p className={styles.poz}># {i + 1}</p>
                 <p className={styles.pol}>{leader.name}</p>
                 <p className={styles.dos}>
-                  {leader.achievements[0] === 1 ? <img className={styles.hardMode} src={activehardMod} alt="" /> : <img src={hardMod} alt="" />}
-                  {leader.achievements[1] === 2 ? <img src={activeSuper} alt="" /> : <img src={Super} alt="" />}
+                  {leader.achievements.includes(1) ? <img className={styles.hardMode} src={activehardMod} alt="" /> : <img src={hardMod} alt="" />}
+                  {leader.achievements.includes(2) ? <img src={activeSuper} alt="" /> : <img src={Super} alt="" />}
                 </p>
                 <p className={styles.time}>{leader.time} сек</p>
               </div>

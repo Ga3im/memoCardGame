@@ -48,7 +48,7 @@ function getTimerValue(startDate, endDate) {
  */
 export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   let [attempts, setAttempts] = useState(3);
-  const { easy, alahomora, setAlahomora, superGame, setSuperGame } =
+  let { easy, alahomora, setAlahomora, superGame, setSuperGame } =
     useContext(EasyModeContext);
   // В cards лежит игровое поле - массив карт и их состояние открыта\закрыта
   const [cards, setCards] = useState([]);

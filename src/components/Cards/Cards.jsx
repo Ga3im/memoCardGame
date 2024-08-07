@@ -188,14 +188,13 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   // открывает все карты на 5 сек
   const epiphany = () => {
     if (superGame === 1) {
-      clearInterval(intervalId);
+      console.log(openCard);
       setSuperGameMod(!superGameMod);
       cards.filter((card) => (card.open = true));
       setTimeout(() => {
         cards.filter((card) => (card.open = false));
         setSuperGameMod(!superGameMod);
       }, 5000);
-      setTimer();
       setSuperGame(superGame - 1);
     }
   };

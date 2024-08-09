@@ -1,4 +1,4 @@
-import { random, shuffle } from "lodash";
+import { shuffle } from "lodash";
 import { useContext, useEffect, useState } from "react";
 import { generateDeck } from "../../utils/cards";
 import styles from "./Cards.module.css";
@@ -46,7 +46,7 @@ function getTimerValue(startDate, endDate) {
  * pairsCount - сколько пар будет в игре
  * previewSeconds - сколько секунд пользователь будет видеть все карты открытыми до начала игры
  */
-export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
+export function Cards({ pairsCount = 3, previewSeconds = 1 }) {
   let [attempts, setAttempts] = useState(3);
   let { easy, alahomora, setAlahomora, superGame, setSuperGame } =
     useContext(EasyModeContext);
@@ -114,7 +114,6 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
         open: true,
       };
     });
-
     setCards(nextCards);
 
     const isPlayerWon = nextCards.every((card) => card.open);
@@ -124,7 +123,6 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
       finishGame(STATUS_WON);
       return;
     }
-
     // Открытые карты на игровом поле
     const openCards = nextCards.filter((card) => card.open);
 
@@ -174,7 +172,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
     // ... игра продолжается
   };
-  // наведение на иконку супер игры 1
+  // наведение на иконку супер игры
   const epiphanyDescrip = (e) => {
     e.preventDefault();
     setIsOpen(!isOpen);
@@ -186,13 +184,33 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   };
 
   // открывает все карты на 5 сек
-  const epiphany = () => {
+  const epiphany = (clickedCard) => {
+    const nextCards = cards.map((card) => {
+      if (card.id !== clickedCard.id) {
+        return card;
+      }
+
+      return {
+        ...card,
+        open: true,
+      };
+    });
+    const openCards = nextCards.filter((card) => card.open);
+    console.log(openCards)
     if (superGame === 1) {
-      console.log(openCard);
       setSuperGameMod(!superGameMod);
-      cards.filter((card) => (card.open = true));
+      cards.filter((card) => {
+        card.open = true;
+      });
       setTimeout(() => {
-        cards.filter((card) => (card.open = false));
+        openCards.filter((opened)=>{
+          cards.filter((card) => {
+            if (opened.open === card.open) {
+              card.open = false
+            }
+          });
+        })
+       
         setSuperGameMod(!superGameMod);
       }, 5000);
       setSuperGame(superGame - 1);
@@ -204,12 +222,12 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
     if (alahomora > 0) {
       setAlahomora(alahomora - 1);
       const randomCard = cards[Math.floor(Math.random() * cards.length)];
-     randomCard.open = true;
-     cards.filter((card)=>{
-      if (card.suit === randomCard.suit && card.rank === randomCard.rank) {
-        return   card.open = true;
-      } 
-     })
+      randomCard.open = true;
+      cards.filter((card) => {
+        if (card.suit === randomCard.suit && card.rank === randomCard.rank) {
+          return (card.open = true);
+        }
+      });
     }
   };
   const isGameEnded = status === STATUS_LOST || status === STATUS_WON;

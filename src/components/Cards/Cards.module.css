@@ -104,6 +104,8 @@
   top: 125px;
   right: 755px;
   color:#004980;
+  box-shadow: 4px 4px 0px 2000px rgba(0, 0, 0, 0.35);
+
 }
 .headP{
   padding-bottom: 10px;
@@ -121,7 +123,8 @@
   top: 125px;
   right: 690px;
   color:#004980;
-}
+  box-shadow: 4px 4px 0px 2000px rgba(0, 0, 0, 0.31);
+ }
 
 .counter{
   position: relative;

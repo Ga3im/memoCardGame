@@ -27,6 +27,7 @@
 
 .listContainer1{
     display: flex;
+    gap: 66px;
     height: 64px;
     margin-top: 15px;
     background: #FFFFFF;
@@ -44,6 +45,7 @@
 .listContainer{
     height: 64px;
     display: flex;
+    gap: 66px;
     align-items: center;
     margin-top: 15px;
     background: #FFFFFF;
@@ -59,10 +61,18 @@
     width: 178px;
 }
 .pol{
-    padding-left: 66px;
     width: 324px;
 }
+.dos{
+    width: 194px;
+    display: flex;
+    gap: 11px;
+    align-items: center;
+}
 .time{
-    padding-left: 234px;
     width: 102px;
+}
+.a{
+    width: 32px;
+    height: 32px;
 }

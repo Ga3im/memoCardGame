@@ -3,9 +3,7 @@ html {
 }
 
 body {
-  background: linear-gradient(0deg, #0053f7b8, white);
   margin: 0;
-  height: 100vh;
 }
 
 #root {

@@ -46,17 +46,16 @@ function getTimerValue(startDate, endDate) {
  * pairsCount - сколько пар будет в игре
  * previewSeconds - сколько секунд пользователь будет видеть все карты открытыми до начала игры
  */
-export function Cards({ pairsCount = 3, previewSeconds = 1 }) {
+export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
   let [attempts, setAttempts] = useState(3);
   let { easy, alahomora, setAlahomora, superGame, setSuperGame } =
     useContext(EasyModeContext);
   // В cards лежит игровое поле - массив карт и их состояние открыта\закрыта
   const [cards, setCards] = useState([]);
+  const [opened, setOpened] = useState([]);
   // Текущий статус игры
   const [status, setStatus] = useState(STATUS_PREVIEW);
   const [superGameMod, setSuperGameMod] = useState(false);
-  let [isOpen, setIsOpen] = useState(false);
-  let [isOpenAl, setIsOpenAl] = useState(false);
 
   // Дата начала игры
   const [gameStartDate, setGameStartDate] = useState(null);
@@ -75,6 +74,8 @@ export function Cards({ pairsCount = 3, previewSeconds = 1 }) {
   }
   function startGame() {
     setAttempts((attempts = 3));
+    setAlahomora((alahomora = 2));
+    setSuperGame((superGame = 1));
     const startDate = new Date();
     setGameEndDate(null);
     setGameStartDate(startDate);
@@ -114,6 +115,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 1 }) {
         open: true,
       };
     });
+
     setCards(nextCards);
 
     const isPlayerWon = nextCards.every((card) => card.open);
@@ -125,6 +127,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 1 }) {
     }
     // Открытые карты на игровом поле
     const openCards = nextCards.filter((card) => card.open);
+    setOpened(openCards);
 
     // Ищем открытые карты, у которых нет пары среди других открытых
     const openCardsWithoutPair = openCards.filter((card) => {
@@ -172,46 +175,29 @@ export function Cards({ pairsCount = 3, previewSeconds = 1 }) {
 
     // ... игра продолжается
   };
-  // наведение на иконку супер игры
-  const epiphanyDescrip = (e) => {
-    e.preventDefault();
-    setIsOpen(!isOpen);
-  };
-
-  const HoverSuperGame2 = (e) => {
-    e.preventDefault();
-    setIsOpenAl(!isOpenAl);
-  };
 
   // открывает все карты на 5 сек
-  const epiphany = (clickedCard) => {
-    const nextCards = cards.map((card) => {
-      if (card.id !== clickedCard.id) {
-        return card;
-      }
-
-      return {
-        ...card,
-        open: true,
-      };
-    });
-    const openCards = nextCards.filter((card) => card.open);
-    console.log(openCards)
+  const epiphany = () => {
+    setTimer()
     if (superGame === 1) {
       setSuperGameMod(!superGameMod);
       cards.filter((card) => {
         card.open = true;
       });
       setTimeout(() => {
-        openCards.filter((opened)=>{
-          cards.filter((card) => {
-            if (opened.open === card.open) {
-              card.open = false
+        setSuperGameMod(!superGameMod);
+        cards.filter((card) => {
+          card.open = false;
+          opened.filter((openedcard) => {
+            if (
+              openedcard.open === card.open &&
+              card.suit === openedcard.suit &&
+              openedcard.rank === card.rank
+            ) {
+              card.open = true;
             }
           });
-        })
-       
-        setSuperGameMod(!superGameMod);
+        });
       }, 5000);
       setSuperGame(superGame - 1);
     }
@@ -223,11 +209,13 @@ export function Cards({ pairsCount = 3, previewSeconds = 1 }) {
       setAlahomora(alahomora - 1);
       const randomCard = cards[Math.floor(Math.random() * cards.length)];
       randomCard.open = true;
-      cards.filter((card) => {
+      const open = cards.filter((card) => {
         if (card.suit === randomCard.suit && card.rank === randomCard.rank) {
           return (card.open = true);
         }
       });
+      setOpened(open)
+
     }
   };
   const isGameEnded = status === STATUS_LOST || status === STATUS_WON;
@@ -266,6 +254,7 @@ export function Cards({ pairsCount = 3, previewSeconds = 1 }) {
       clearInterval(intervalId);
     };
   }, [gameStartDate, gameEndDate]);
+
   return (
     <div className={styles.body}>
       <div className={styles.container}>
@@ -297,44 +286,34 @@ export function Cards({ pairsCount = 3, previewSeconds = 1 }) {
               disabled={status === STATUS_IN_PROGRESS ? false : true}
               className={styles.onButtonDos}
             >
+              <div className={styles.superBtn}>
               <img
-                onMouseOver={epiphanyDescrip}
-                onMouseOut={() => setIsOpen((isOpen = false))}
                 onClick={epiphany}
                 className={styles.superBtn}
                 src="../super.png"
                 alt=""
               />
-            </button>
-            {isOpen ? (
-              <div className={styles.descriptionEpiphany}>
-                <p className={styles.headP}>Прозрение</p>
-                <p>На 5 секунд показываются все карты.</p>
+              <span className={styles.superBtnText}><p className={styles.desName}>Прозрение</p> На 5 секунд показываются все карты.</span>
               </div>
-            ) : null}
+            </button>
 
             <div className={styles.counter}>
               <p className={styles.counterFont}>{superGame}</p>
             </div>
-            <button
+            <button 
               disabled={status === STATUS_IN_PROGRESS ? false : true}
               className={styles.onButtonDos}
             >
+              <div className={styles.superBtn}>
               <img
-                onMouseOver={HoverSuperGame2}
-                onMouseOut={() => setIsOpenAl((isOpenAl = false))}
                 onClick={openTwoCards}
                 className={styles.superBtn}
                 src="../super2.png"
                 alt=""
               />
-            </button>
-            {isOpenAl ? (
-              <div className={styles.descriptionAlahomora}>
-                <p className={styles.headP}>Алохомора</p>
-                <p>Открывает случайную пару</p>
+              <span className={styles.superBtnText}><p className={styles.desName}>Алохомора</p>Открывает случайную пару</span>
               </div>
-            ) : null}
+            </button>
             <div className={styles.counter}>
               <p className={styles.counterFont}>{alahomora}</p>
             </div>

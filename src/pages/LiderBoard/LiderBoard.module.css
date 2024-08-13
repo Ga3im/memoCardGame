@@ -76,3 +76,32 @@
     width: 32px;
     height: 32px;
 }
+.hardSelect::after{
+    content:attr();
+}
+.tooltip{
+    height: 32px;
+}
+.tooltip1{
+    height: 26px;
+}
+
+.tooltiptext {
+    visibility: hidden;
+    position: absolute;
+    width: 174px;
+    height: 78px;
+    z-index: 1;
+    background: #C2F5FF;
+    border-radius: 12px;
+    font-size: 18px;
+    color: #004980;
+    text-align: center;
+    align-content: center;
+  }
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+  .tooltip1:hover .tooltiptext {
+    visibility: visible;
+  }

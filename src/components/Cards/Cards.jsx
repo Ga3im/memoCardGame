@@ -178,7 +178,6 @@ export function Cards({ pairsCount = 3, previewSeconds = 5 }) {
 
   // открывает все карты на 5 сек
   const epiphany = () => {
-    setTimer()
     if (superGame === 1) {
       setSuperGameMod(!superGameMod);
       cards.filter((card) => {

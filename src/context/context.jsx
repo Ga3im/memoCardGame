@@ -4,5 +4,8 @@ export const EasyModeContext = createContext(null);
 
 export const EasyModeProvider = ({ children }) => {
   const [easy, setEasy] = useState(false);
-  return <EasyModeContext.Provider value={{ easy, setEasy }}>{children}</EasyModeContext.Provider>;
+  let [superGame, setSuperGame] = useState(1);
+  let [alahomora, setAlahomora] = useState(2);
+  return <EasyModeContext.Provider value={{ easy, setEasy, superGame, alahomora, setAlahomora, setSuperGame }}>{children}</EasyModeContext.Provider>;
 };
+
